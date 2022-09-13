@@ -1,0 +1,7 @@
+mysql:
+  database: "dashboard"
+  username: "root"
+  password: "scout"
+
+jwt:
+  ttl: "720h"

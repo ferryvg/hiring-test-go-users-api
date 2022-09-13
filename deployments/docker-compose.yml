@@ -1,0 +1,44 @@
+version: '2'
+services:
+  app:
+    container_name: users-api-app
+    image: golang:1.18
+    volumes:
+      - ${PWD}:/go/src/github.com/ferryvg/hiring-test-go-users-api
+    environment:
+      - CONSUL_HTTP_ADDR=consul:8500
+      - SAAS_CLUSTER=test
+      - APP_MYSQL_DATABASE=users_api
+      - APP_MYSQL_USERNAME=root
+      - APP_MYSQL_PASSWORD=scout
+    working_dir:
+      /go/src/github.com/ferryvg/hiring-test-go-users-api
+    depends_on:
+      - consul
+      - db01
+    ports:
+      - "6999:6999"
+
+  consul:
+    container_name: users-api-consul
+    image: consul:latest
+    depends_on:
+      - db01
+    ports:
+      - 8500:8500
+    volumes:
+      - ${PWD}/deployments/etc/consul.d:/consul/config
+
+  db01:
+    container_name: users-api-db01
+    image: mysql:5.7
+    restart: always
+    hostname: db
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: 'users_api'
+      MYSQL_ROOT_USER: 'root'
+      MYSQL_ROOT_PASSWORD: 'scout'
+    volumes:
+      - ${PWD}/deployments/etc/sql:/docker-entrypoint-initdb.d
