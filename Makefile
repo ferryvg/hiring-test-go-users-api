@@ -37,7 +37,11 @@ build: compile
 
 ## Run 'build' in docker-compose
 build.docker:
-	docker-compose -f ${COMPOSE_FILE} run --rm -u ${USER_ID} app bash -c "make build"
+	docker-compose -f ${COMPOSE_FILE} run --rm -u ${USER_ID} app bash -c "/tmp/scripts/waiter.sh && make build"
+
+## Run 'test' in docker-compose
+test.docker:
+	docker-compose -f ${COMPOSE_FILE} run --rm -u ${USER_ID} app bash -c "/tmp/scripts/waiter.sh && make test"
 
 ## Run 'serve'
 serve: compile
@@ -45,7 +49,7 @@ serve: compile
 
 ## Run 'serve' in docker-compose
 serve.docker:
-	docker-compose -f ${COMPOSE_FILE} run --rm -u ${USER_ID} -p 6999:6999 app bash -c "sleep 1 && make serve"
+	docker-compose -f ${COMPOSE_FILE} run --rm -u ${USER_ID} -p 6999:6999 app bash -c "/tmp/scripts/waiter.sh && make serve"
 
 ## This help screen
 help:

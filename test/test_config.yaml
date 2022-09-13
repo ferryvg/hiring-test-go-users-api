@@ -1,0 +1,7 @@
+mysql:
+  database: "some_db_name"
+  username: "db_user"
+  password: "123456"
+
+jwt:
+  ttl: "24h"

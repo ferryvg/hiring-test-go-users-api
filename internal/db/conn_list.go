@@ -1,11 +1,11 @@
 package db
 
 import (
+	"github.com/ferryvg/hiring-test-go-users-api/internal/config"
 	"strconv"
 	"strings"
 	"sync"
 
-	"github.com/ferryvg/hiring-test-go-users-api/internal/config"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 )
@@ -35,7 +35,7 @@ type ConnFactory interface {
 
 type connListImpl struct {
 	factory ConnFactory
-	target  *config.ClusterNodeList
+	target  config.ClusterNodeStore
 	logger  logrus.FieldLogger
 	nodes   []string
 	connMap map[string]*sqlx.DB
@@ -43,7 +43,7 @@ type connListImpl struct {
 }
 
 // NewConnList creates new database connections list.
-func NewConnList(factory ConnFactory, target *config.ClusterNodeList, logger logrus.FieldLogger) ConnList {
+func NewConnList(factory ConnFactory, target config.ClusterNodeStore, logger logrus.FieldLogger) ConnList {
 	return &connListImpl{
 		factory: factory,
 		target:  target,

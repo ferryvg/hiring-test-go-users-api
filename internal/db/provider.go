@@ -9,7 +9,7 @@ import (
 
 type Provider struct{}
 
-// Register components that provides access to MySQL dashboard database.
+// Register components that provides access to MySQL database.
 func (p *Provider) Register(c core.Container) {
 	p.registerMysqlFactory(c)
 	p.registerMysqlConnList(c)

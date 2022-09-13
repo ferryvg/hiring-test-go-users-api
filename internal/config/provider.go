@@ -31,7 +31,7 @@ func (*Provider) registerConfig(c core.Container) {
 			logger.WithError(err).Fatal("Failed to parse service configuration")
 		}
 
-		config.Mysql.Nodes = NewClusterNodeList()
+		config.Mysql.Nodes = NewClusterNodeStore()
 
 		return config
 	})

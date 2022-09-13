@@ -2,6 +2,8 @@ package dal_test
 
 import (
 	"context"
+	"github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus/hooks/test"
 	"strings"
 	"testing"
 	"time"
@@ -21,6 +23,9 @@ type UsersManagerTestSuite struct {
 	dbManager db.Manager
 	manager   dal.UsersManager
 
+	logger     *logrus.Logger
+	loggerHook *test.Hook
+
 	ctx context.Context
 }
 
@@ -28,10 +33,11 @@ func (s *UsersManagerTestSuite) SetupTest() {
 	s.config = &config.JwtConfig{
 		TTL: 2 * time.Second,
 	}
+	s.logger, s.loggerHook = test.NewNullLogger()
 
 	s.dbManager = NewDbManager()
 
-	s.manager = dal.NewUsersManager(s.config, s.dbManager)
+	s.manager = dal.NewUsersManager(s.config, s.dbManager, s.logger)
 
 	s.ctx = context.Background()
 }

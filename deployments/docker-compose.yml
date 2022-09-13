@@ -2,15 +2,17 @@ version: '2'
 services:
   app:
     container_name: users-api-app
-    image: golang:1.18
+    build:
+      context: ${PWD}
     volumes:
       - ${PWD}:/go/src/github.com/ferryvg/hiring-test-go-users-api
+      - ${PWD}/scripts:/tmp/scripts
     environment:
-      - CONSUL_HTTP_ADDR=consul:8500
-      - SAAS_CLUSTER=test
-      - APP_MYSQL_DATABASE=users_api
-      - APP_MYSQL_USERNAME=root
-      - APP_MYSQL_PASSWORD=scout
+      CONSUL_HTTP_ADDR: '${CONSUL_HTTP_ADDR:-consul:8500}'
+      SAAS_CLUSTER: '${SAAS_CLUSTER:-dev}'
+      APP_MYSQL_DATABASE: '${MYSQL_DATABASE:-users_api}'
+      APP_MYSQL_USERNAME: '${MYSQL_ROOT_USER:-root}'
+      APP_MYSQL_PASSWORD: '${MYSQL_ROOT_PASSWORD:-scout}'
     working_dir:
       /go/src/github.com/ferryvg/hiring-test-go-users-api
     depends_on:
@@ -25,7 +27,7 @@ services:
     depends_on:
       - db01
     ports:
-      - 8500:8500
+      - "8500:8500"
     volumes:
       - ${PWD}/deployments/etc/consul.d:/consul/config
 
@@ -35,10 +37,10 @@ services:
     restart: always
     hostname: db
     ports:
-      - 3306:3306
+      - "3306:3306"
     environment:
-      MYSQL_DATABASE: 'users_api'
-      MYSQL_ROOT_USER: 'root'
-      MYSQL_ROOT_PASSWORD: 'scout'
+      MYSQL_DATABASE: '${MYSQL_DATABASE:-users_api}'
+      MYSQL_ROOT_USER: '${MYSQL_ROOT_USER:-root}'
+      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD:-scout}'
     volumes:
       - ${PWD}/deployments/etc/sql:/docker-entrypoint-initdb.d

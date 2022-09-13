@@ -1,5 +1,5 @@
 mysql:
-  database: "dashboard"
+  database: "users_api"
   username: "root"
   password: "scout"
 
